@@ -1,0 +1,424 @@
+#include <LiquidCrystal.h>
+
+    
+//Initialize the LCD with the arduino. LiquidCrystal(rs, enable, d4, d5, d6, d7)
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2, ct=9;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+ 
+String inbound;
+char lastchar;
+
+int createdChars = 0;
+
+
+
+void initializeLCD() {
+  lcd.begin(16, 2);
+}
+
+
+
+  
+void setup() {
+  Serial.begin(9600);
+  initializeLCD();
+  analogWrite(ct,50);
+  lcd.setCursor(0, 0);
+  lcd.print("Wireless Notice");
+  lcd.setCursor(0, 1);
+  lcd.print("     Board     ");
+  delay(3000);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("BT: DVN_LCD");
+  delay(4000);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("  A Project By");
+  lcd.setCursor(0, 1);
+  lcd.print("   DOT._.DVN");
+  delay(3000);
+  lcd.clear();
+}
+void loop() {
+  while(Serial.available()) {
+    delay(50);
+    char c=Serial.read();
+    lastchar=c;
+    inbound+=c;
+  }
+
+  
+  if (inbound.length()>0) {
+      //strip the last character (control data) from "inbound" string
+      inbound.remove(inbound.length()-1);
+
+        //############### Display Text ######################
+        if (lastchar == ' ' ){
+          lcd.print(inbound);
+          }
+        //############### Create Characters #################
+        else if
+              (lastchar == 'b') { // Example: 31,31,31,31,31,31,31,31b
+
+                  int valA = 0;
+                  int valB = 0;
+                  int valC = 0;
+                  int valD = 0;
+                  int valE = 0;
+                  int valF = 0;
+                  int valG = 0;
+                  int valH = 0;
+                  String valMixed = "";
+
+                
+                  for (int i = 0; i < inbound.length(); i++) {
+                    if (inbound.substring(i, i+1) == ",") {    
+                      valA = inbound.substring(0, i).toInt();
+                      valMixed = inbound.substring(i+1);
+                      break;
+                    }
+                  }
+
+                  for (int i = 0; i < valMixed.length(); i++) {
+                    if (valMixed.substring(i, i+1) == ",") {    
+                      valB = valMixed.substring(0, i).toInt();
+                      valMixed = valMixed.substring(i+1);
+                      break;
+                    }
+                  }
+
+                  for (int i = 0; i < valMixed.length(); i++) {
+                    if (valMixed.substring(i, i+1) == ",") {    
+                      valC = valMixed.substring(0, i).toInt();
+                      valMixed = valMixed.substring(i+1);
+                      break;
+                    }
+                  }
+
+                  for (int i = 0; i < valMixed.length(); i++) {
+                    if (valMixed.substring(i, i+1) == ",") {    
+                      valD = valMixed.substring(0, i).toInt();
+                      valMixed = valMixed.substring(i+1);
+                      break;
+                    }
+                  }
+        
+                  for (int i = 0; i < valMixed.length(); i++) {
+                    if (valMixed.substring(i, i+1) == ",") {    
+                      valE = valMixed.substring(0, i).toInt();
+                      valMixed = valMixed.substring(i+1);
+                      break;
+                    }
+                  }
+
+                  for (int i = 0; i < valMixed.length(); i++) {
+                    if (valMixed.substring(i, i+1) == ",") {    
+                      valF = valMixed.substring(0, i).toInt();
+                      valMixed = valMixed.substring(i+1);
+                      break;
+                    }
+                  }
+
+                  for (int i = 0; i < valMixed.length(); i++) {
+                    if (valMixed.substring(i, i+1) == ",") {    
+                      valG = valMixed.substring(0, i).toInt();
+                      valMixed = valMixed.substring(i+1);
+                      break;
+                    }
+                  }
+                  
+                  valH = valMixed.toInt();
+
+                byte byte1 = (byte) valA;
+                byte byte2 = (byte) valB;
+                byte byte3 = (byte) valC;
+                byte byte4 = (byte) valD;
+                byte byte5 = (byte) valE;
+                byte byte6 = (byte) valF;
+                byte byte7 = (byte) valG;
+                byte byte8 = (byte) valH;
+
+                if (createdChars == 0) {
+                    createdChars = 1;
+                    byte char1[8] = {
+                      byte1,
+                      byte2,
+                      byte3,
+                      byte4,
+                      byte5,
+                      byte6,
+                      byte7,
+                      byte8
+                    };
+                  lcd.createChar(0, char1);
+                }
+                else if (createdChars == 1) {
+                    createdChars = 2;
+                    byte char2[8] = {
+                      byte1,
+                      byte2,
+                      byte3,
+                      byte4,
+                      byte5,
+                      byte6,
+                      byte7,
+                      byte8
+                    }; 
+                  lcd.createChar(1, char2);                 
+                }
+                else if (createdChars == 2) {
+                    createdChars = 3;
+                    byte char3[8] = {
+                      byte1,
+                      byte2,
+                      byte3,
+                      byte4,
+                      byte5,
+                      byte6,
+                      byte7,
+                      byte8
+                    }; 
+                  lcd.createChar(2, char3);                 
+                }
+                else if (createdChars == 3) {
+                    createdChars = 4;
+                    byte char4[8] = {
+                      byte1,
+                      byte2,
+                      byte3,
+                      byte4,
+                      byte5,
+                      byte6,
+                      byte7,
+                      byte8
+                    }; 
+                  lcd.createChar(3, char4);                 
+                }
+                else if (createdChars == 4) {
+                    createdChars = 5;
+                    byte char5[8] = {
+                      byte1,
+                      byte2,
+                      byte3,
+                      byte4,
+                      byte5,
+                      byte6,
+                      byte7,
+                      byte8
+                    }; 
+                  lcd.createChar(4, char5);                 
+                }
+                else if (createdChars == 5) {
+                    createdChars = 6;
+                    byte char6[8] = {
+                      byte1,
+                      byte2,
+                      byte3,
+                      byte4,
+                      byte5,
+                      byte6,
+                      byte7,
+                      byte8
+                    }; 
+                  lcd.createChar(5, char6);                 
+                }
+                else if (createdChars == 6) {
+                    createdChars = 7;
+                    byte char7[8] = {
+                      byte1,
+                      byte2,
+                      byte3,
+                      byte4,
+                      byte5,
+                      byte6,
+                      byte7,
+                      byte8
+                    }; 
+                  lcd.createChar(6, char7);                 
+                }
+                else if (createdChars == 7) {
+                    createdChars = 8;
+                    byte char8[8] = {
+                      byte1,
+                      byte2,
+                      byte3,
+                      byte4,
+                      byte5,
+                      byte6,
+                      byte7,
+                      byte8
+                    }; 
+                  lcd.createChar(7, char8);                 
+                }     
+              }
+            
+        //############## Display Characters #################
+        else if
+              (lastchar == 'a'){
+                if (inbound == "Char1") {
+                  lcd.write(byte(0));    
+                }
+                else if (inbound == "Char2") {
+                  lcd.write(byte(1));
+                }
+                else if (inbound == "Char3") {
+                  lcd.write(byte(2));
+                }
+                else if (inbound == "Char4") {
+                  lcd.write(byte(3));
+                }
+                else if (inbound == "Char5") {
+                  lcd.write(byte(4));
+                }
+                else if (inbound == "Char6") {
+                  lcd.write(byte(5));
+                }
+                else if (inbound == "Char7") {
+                  lcd.write(byte(6));
+                }
+                else if (inbound == "Char8") {
+                  lcd.write(byte(7));
+                }  
+              }
+        //############## Reset Characters #################
+        else if
+              (lastchar == 'r') {
+                createdChars = 0;
+                byte *char1=malloc(10*sizeof(byte));
+                free(char1);
+                byte *char2=malloc(10*sizeof(byte));
+                free(char2);
+                byte *char3=malloc(10*sizeof(byte));
+                free(char3);
+                byte *char4=malloc(10*sizeof(byte));
+                free(char4);
+                byte *char5=malloc(10*sizeof(byte));
+                free(char5);
+                byte *char6=malloc(10*sizeof(byte));
+                free(char6);
+                byte *char7=malloc(10*sizeof(byte));
+                free(char7);
+                byte *char8=malloc(10*sizeof(byte));
+                free(char8);
+                initializeLCD();
+              }
+        
+        //############## Process Commands ##################
+        else if
+              (lastchar == 'c') {
+              if
+                (inbound == "Begin"){
+                  initializeLCD();
+              }
+              else if
+                (inbound == "ClearScreen"){
+                  lcd.clear();
+              }
+              else if
+                (inbound == "Display"){
+                  lcd.display();
+              }
+              else if
+                (inbound == "NoDisplay"){
+                  lcd.noDisplay();
+                }
+              else if
+                (inbound == "ShowCursorON"){
+                  lcd.cursor();
+                }
+              else if
+                (inbound == "ShowCursorOFF"){
+                  lcd.noCursor();
+                }
+              else if
+                (inbound == "CursorBlock"){
+                  lcd.blink();
+                }
+              else if
+                (inbound == "CursorBlinkOFF"){
+                  lcd.noBlink();
+                }
+              else if
+                (inbound == "LCDhome"){
+                  lcd.home();
+                }
+              else if
+                (inbound == "Autoscroll"){
+                  lcd.autoscroll();
+                }
+              else if
+                (inbound == "NoAutoscroll"){
+                  lcd.noAutoscroll();
+                }
+              else if
+                (inbound == "LeftToRight"){ // Direction of text (left to right)
+                  lcd.leftToRight();
+                }
+              else if
+                (inbound == "RightToLeft"){ // Direction of text (right to left)
+                  lcd.rightToLeft();
+                }
+              else if
+                (inbound.startsWith("ScrollDisplayLeft")){ // Example of incoming: scrollDisplayLeft#3#150 (#, 1-100 (number of positions), #, delay in milliseconds)
+                  String mixedVal;
+                  int positions, interval;
+
+                  mixedVal=inbound.substring(18); //3#150
+                
+                  for (int i = 0; i < mixedVal.length(); i++) {
+                    if (mixedVal.substring(i, i+1) == "#") {    
+                      positions = mixedVal.substring(0, i).toInt();
+                      interval = mixedVal.substring(i+1).toInt();
+                      break;
+                    }
+                  }
+                
+                  for (int positionCounter = 0; positionCounter < positions; positionCounter++) {
+                    lcd.scrollDisplayLeft();
+                    delay(interval);
+                  }
+                }            
+              else if
+                (inbound.startsWith("ScrollDisplayRight")){ // Example of incoming: scrollDisplayRight#3#150 (#,  1-100 (number of positions), #, delay in milliseconds)
+                  String mixedVal1;
+                  int positions1, interval1;
+
+                  mixedVal1=inbound.substring(19); // Example: 3#150
+                
+                  for (int i = 0; i < mixedVal1.length(); i++) {
+                    if (mixedVal1.substring(i, i+1) == "#") {    
+                      positions1 = mixedVal1.substring(0, i).toInt();
+                      interval1 = mixedVal1.substring(i+1).toInt();
+                      break;
+                    }
+                  }
+                
+                  for (int positionCounter = 0; positionCounter < positions1; positionCounter++) {
+                    lcd.scrollDisplayRight();
+                    delay(interval1);
+                  }  
+                }
+              else if
+                (inbound.startsWith("SetCursor")){
+                
+                  String setCursorRaw = inbound.substring(9);
+                  int cursorColumn = 0;
+                  int cursorRow = 0;
+
+                  for (int i = 0; i < setCursorRaw.length(); i++) {
+                    if (setCursorRaw.substring(i, i+1) == ",") {    
+                      cursorColumn = setCursorRaw.substring(0, i).toInt();
+                      cursorRow = setCursorRaw.substring(i+1).toInt();
+                      break;
+                    }
+                }
+              lcd.setCursor(cursorColumn,cursorRow);
+            }
+          }
+    }
+          //###########################################
+        
+      inbound="";
+      lastchar="";
+    }
